@@ -135,6 +135,8 @@ export class Controller {
 			chatSettings,
 			shellIntegrationTimeout,
 			terminalReuseEnabled,
+			terminalOutputLineLimit,
+			defaultTerminalProfile,
 			enableCheckpointsSetting,
 			isNewUser,
 			taskHistory,
@@ -170,6 +172,8 @@ export class Controller {
 			chatSettings,
 			shellIntegrationTimeout,
 			terminalReuseEnabled ?? true,
+			terminalOutputLineLimit ?? 500,
+			defaultTerminalProfile ?? "default",
 			enableCheckpointsSetting ?? true,
 			task,
 			images,
@@ -220,6 +224,7 @@ export class Controller {
 				await this.postStateToWebview()
 				break
 			}
+
 			case "clearAllTaskHistory": {
 				const answer = await vscode.window.showWarningMessage(
 					"What would you like to delete?",
@@ -945,6 +950,7 @@ export class Controller {
 			chatSettings,
 			userInfo,
 			mcpMarketplaceEnabled,
+			mcpRichDisplayEnabled,
 			telemetrySetting,
 			planActSeparateModelsSetting,
 			enableCheckpointsSetting,
@@ -952,8 +958,10 @@ export class Controller {
 			globalWorkflowToggles,
 			shellIntegrationTimeout,
 			terminalReuseEnabled,
+			defaultTerminalProfile,
 			isNewUser,
 			mcpResponsesCollapsed,
+			terminalOutputLineLimit,
 		} = await getAllExtensionState(this.context)
 
 		const localClineRulesToggles =
@@ -985,6 +993,7 @@ export class Controller {
 			chatSettings,
 			userInfo,
 			mcpMarketplaceEnabled,
+			mcpRichDisplayEnabled,
 			telemetrySetting,
 			planActSeparateModelsSetting,
 			enableCheckpointsSetting: enableCheckpointsSetting ?? true,
@@ -997,8 +1006,10 @@ export class Controller {
 			globalWorkflowToggles: globalWorkflowToggles || {},
 			shellIntegrationTimeout,
 			terminalReuseEnabled,
+			defaultTerminalProfile,
 			isNewUser,
 			mcpResponsesCollapsed,
+			terminalOutputLineLimit,
 		}
 	}
 

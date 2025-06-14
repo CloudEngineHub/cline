@@ -234,9 +234,12 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		shellIntegrationTimeout,
 		enableCheckpointsSettingRaw,
 		mcpMarketplaceEnabledRaw,
+		mcpRichDisplayEnabled,
 		mcpResponsesCollapsedRaw,
 		globalWorkflowToggles,
 		terminalReuseEnabled,
+		terminalOutputLineLimit,
+		defaultTerminalProfile,
 	] = await Promise.all([
 		getGlobalState(context, "isNewUser") as Promise<boolean | undefined>,
 		getSecret(context, "apiKey") as Promise<string | undefined>,
@@ -297,9 +300,12 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		getGlobalState(context, "shellIntegrationTimeout") as Promise<number | undefined>,
 		getGlobalState(context, "enableCheckpointsSetting") as Promise<boolean | undefined>,
 		getGlobalState(context, "mcpMarketplaceEnabled") as Promise<boolean | undefined>,
+		getGlobalState(context, "mcpRichDisplayEnabled") as Promise<boolean | undefined>,
 		getGlobalState(context, "mcpResponsesCollapsed") as Promise<boolean | undefined>,
 		getGlobalState(context, "globalWorkflowToggles") as Promise<ClineRulesToggles | undefined>,
 		getGlobalState(context, "terminalReuseEnabled") as Promise<boolean | undefined>,
+		getGlobalState(context, "terminalOutputLineLimit") as Promise<number | undefined>,
+		getGlobalState(context, "defaultTerminalProfile") as Promise<string | undefined>,
 	])
 
 	const localClineRulesToggles = (await getWorkspaceState(context, "localClineRulesToggles")) as ClineRulesToggles
@@ -490,12 +496,15 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		previousModeAwsBedrockCustomSelected,
 		previousModeAwsBedrockCustomModelBaseId,
 		mcpMarketplaceEnabled: mcpMarketplaceEnabled,
+		mcpRichDisplayEnabled: mcpRichDisplayEnabled ?? true,
 		mcpResponsesCollapsed: mcpResponsesCollapsed,
 		telemetrySetting: telemetrySetting || "unset",
 		planActSeparateModelsSetting,
 		enableCheckpointsSetting: enableCheckpointsSetting,
 		shellIntegrationTimeout: shellIntegrationTimeout || 4000,
 		terminalReuseEnabled: terminalReuseEnabled ?? true,
+		terminalOutputLineLimit: terminalOutputLineLimit ?? 500,
+		defaultTerminalProfile: defaultTerminalProfile ?? "default",
 		globalWorkflowToggles: globalWorkflowToggles || {},
 	}
 }

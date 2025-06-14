@@ -67,7 +67,10 @@ export type GlobalStateKey =
 	| "shellIntegrationTimeout"
 	| "mcpResponsesCollapsed"
 	| "terminalReuseEnabled"
+	| "defaultTerminalProfile"
 	| "isNewUser"
+	| "terminalOutputLineLimit"
+	| "mcpRichDisplayEnabled"
 
 export type LocalStateKey =
 	| "localClineRulesToggles"
