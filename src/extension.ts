@@ -26,6 +26,9 @@ import { migratePlanActGlobalToWorkspaceStorage, migrateCustomInstructionsToGlob
 
 import { sendFocusChatInputEvent } from "./core/controller/ui/subscribeToFocusChatInput"
 import { FileContextTracker } from "./core/context/context-tracking/FileContextTracker"
+import { maybeInitializeHostBridgeClient } from "./hosts/host-bridge-client"
+import { vscodeHostBridgeClient } from "@generated/hosts/vscode/client/host-grpc-client"
+
 /*
 Built using https://github.com/microsoft/vscode-webview-ui-toolkit
 
@@ -46,6 +49,8 @@ export async function activate(context: vscode.ExtensionContext) {
 	ErrorService.initialize()
 	Logger.initialize(outputChannel)
 	Logger.log("Cline extension activated")
+
+	maybeInitializeHostBridgeClient(vscodeHostBridgeClient)
 
 	// Migrate global storage values to workspace storage (one-time cleanup)
 	await migratePlanActGlobalToWorkspaceStorage(context)
@@ -639,7 +644,8 @@ export async function activate(context: vscode.ExtensionContext) {
 //
 // This is a workaround to reload the extension when the source code changes
 // since vscode doesn't support hot reload for extensions
-const { IS_DEV, DEV_WORKSPACE_FOLDER } = process.env
+const IS_DEV = process.env.IS_DEV
+const DEV_WORKSPACE_FOLDER = process.env.DEV_WORKSPACE_FOLDER
 
 // This method is called when your extension is deactivated
 export async function deactivate() {
