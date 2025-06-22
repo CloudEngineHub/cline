@@ -20,6 +20,7 @@ import { ChatSettings } from "@shared/ChatSettings"
 import { ExtensionMessage, ExtensionState, Platform } from "@shared/ExtensionMessage"
 import { HistoryItem } from "@shared/HistoryItem"
 import { McpMarketplaceCatalog } from "@shared/mcp"
+import { UserInfo } from "@shared/UserInfo"
 import { TelemetrySetting } from "@shared/TelemetrySetting"
 import { WebviewMessage } from "@shared/WebviewMessage"
 import { fileExistsAtPath } from "@utils/fs"
@@ -124,7 +125,7 @@ export class Controller {
 		}
 	}
 
-	async setUserInfo(info?: { displayName: string | null; email: string | null; photoURL: string | null }) {
+	async setUserInfo(info?: UserInfo) {
 		await updateGlobalState(this.context, "userInfo", info)
 	}
 
@@ -204,15 +205,6 @@ export class Controller {
 	 */
 	async handleWebviewMessage(message: WebviewMessage) {
 		switch (message.type) {
-			case "authStateChanged":
-				await this.setUserInfo(message.user || undefined)
-				await this.postStateToWebview()
-				break
-
-			case "fetchUserCreditsData": {
-				await this.fetchUserCreditsData()
-				break
-			}
 			case "fetchMcpMarketplace": {
 				await this.fetchMcpMarketplace(message.bool)
 				break
@@ -493,20 +485,6 @@ export class Controller {
 			}
 			await this.initTask(undefined, undefined, undefined, historyItem) // clears task again, so we need to abortTask manually above
 			// await this.postStateToWebview() // new Cline instance will post state when it's ready. having this here sent an empty messages array to webview leading to virtuoso having to reload the entire list
-		}
-	}
-
-	// Account
-
-	async fetchUserCreditsData() {
-		try {
-			await Promise.all([
-				this.accountService?.fetchBalance(),
-				this.accountService?.fetchUsageTransactions(),
-				this.accountService?.fetchPaymentTransactions(),
-			])
-		} catch (error) {
-			console.error("Failed to fetch user credits data:", error)
 		}
 	}
 

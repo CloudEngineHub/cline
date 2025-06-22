@@ -10,18 +10,11 @@ import { McpServer, McpMarketplaceCatalog, McpDownloadResponse, McpViewTab } fro
 import { TelemetrySetting } from "./TelemetrySetting"
 import type { BalanceResponse, UsageTransaction, PaymentTransaction } from "../shared/ClineAccount"
 import { ClineRulesToggles } from "./cline-rules"
+import { UserInfo } from "./UserInfo"
 
 // webview will hold state
 export interface ExtensionMessage {
-	type:
-		| "action"
-		| "state"
-		| "selectedImages"
-		| "mcpDownloadDetails"
-		| "userCreditsBalance"
-		| "userCreditsUsage"
-		| "userCreditsPayments"
-		| "grpc_response" // New type for gRPC responses
+	type: "action" | "state" | "selectedImages" | "mcpDownloadDetails" | "grpc_response" // New type for gRPC responses
 	text?: string
 	action?: "accountLogoutClicked"
 	state?: ExtensionState
@@ -39,9 +32,6 @@ export interface ExtensionMessage {
 	commits?: GitCommit[]
 	url?: string
 	isImage?: boolean
-	userCreditsBalance?: BalanceResponse
-	userCreditsUsage?: UsageTransaction[]
-	userCreditsPayments?: PaymentTransaction[]
 	success?: boolean
 	endpoint?: string
 	isBundled?: boolean
@@ -91,11 +81,7 @@ export interface ExtensionState {
 	terminalOutputLineLimit: number
 	defaultTerminalProfile?: string
 	uriScheme?: string
-	userInfo?: {
-		displayName: string | null
-		email: string | null
-		photoURL: string | null
-	}
+	userInfo?: UserInfo
 	version: string
 	distinctId: string
 	globalClineRulesToggles: ClineRulesToggles
